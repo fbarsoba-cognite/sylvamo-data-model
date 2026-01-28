@@ -172,3 +172,20 @@ Internal use only - Cognite/Sylvamo
 ---
 
 *Created: January 28, 2026*
+
+---
+
+## Feedback & Comments
+
+💬 **Have feedback on this data model?**
+
+- [Open a Discussion](https://github.com/fbarsoba-cognite/sylvamo-data-model/discussions) for general questions
+- [Create an Issue](https://github.com/fbarsoba-cognite/sylvamo-data-model/issues/new) for specific suggestions
+- [Submit a Pull Request](https://github.com/fbarsoba-cognite/sylvamo-data-model/pulls) for proposed changes
+
+### How to Comment on Specific Sections
+
+1. Click on a file (e.g., `docs/SYLVAMO_MFG_DATA_MODEL_DIAGRAM.md`)
+2. Click the line number you want to comment on
+3. Click the `...` menu → "Reference in new issue"
+4. This creates an issue linked to that specific line!
