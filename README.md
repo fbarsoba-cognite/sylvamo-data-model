@@ -170,14 +170,34 @@ Based on guidance from Johan Stabekk (Cognite ISA Expert, Jan 28, 2026):
 
 | Document | Description |
 |----------|-------------|
-| [**Use Cases & Queries**](docs/USE_CASES_AND_QUERIES.md) | Verified use case scenarios with live query examples |
+| [**Use Cases & Queries**](docs/USE_CASES_AND_QUERIES.md) | Verified use case scenarios with real data query examples |
+| [**Data Pipeline & Sources**](docs/DATA_PIPELINE_AND_SOURCES.md) | Data sources, transformations, and refresh schedules |
 | [**Data Model Specification**](docs/DATA_MODEL_SPECIFICATION.md) | Complete spec with all containers, properties, and examples |
 | [Data Model Diagram](docs/SYLVAMO_MFG_DATA_MODEL_DIAGRAM.md) | Visual diagrams with Mermaid |
 | [Expert Scenarios](docs/USE_CASE_VALIDATION_EXPERT_SCENARIOS.md) | Industry use cases enabled by this model |
 | [ISA Alignment](docs/COGNITE_ISA_EXTENSION_AND_SYLVAMO_ALIGNMENT.md) | ISA-95/88 alignment analysis |
 | [Johan's Guidance](docs/JOHAN_ISA95_GUIDANCE_SUMMARY.md) | Expert recommendations from Cognite |
 
-## Real Data (from Sylvamo Production Systems)
+## Data Sources
+
+```
+SAP ERP ──────► Microsoft Fabric ──────► CDF RAW ──────► sylvamo_mfg Model
+PPR System ───►                                         
+SharePoint ───►                                         
+Proficy ──────►                                         
+```
+
+| Source System | RAW Database | Target Entity |
+|---------------|--------------|---------------|
+| SAP (via Fabric) | `raw_sylvamo_fabric/ppv_snapshot` | MaterialCostVariance |
+| PPR (via Fabric) | `raw_sylvamo_fabric/ppr_hist_reel` | Reel |
+| PPR (via Fabric) | `raw_sylvamo_fabric/ppr_hist_roll` | Roll |
+| PPR (via Fabric) | `raw_sylvamo_fabric/ppr_hist_package` | Package |
+| SharePoint | `raw_sylvamo_pilot/sharepoint_roll_quality` | QualityResult |
+
+**[See Full Data Pipeline Documentation →](docs/DATA_PIPELINE_AND_SOURCES.md)**
+
+## Real Data Statistics
 
 | Entity | Count | Source |
 |--------|-------|--------|
