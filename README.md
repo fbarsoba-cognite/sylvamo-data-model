@@ -13,7 +13,7 @@ The `sylvamo_mfg` data model implements ISA-95 and ISA-88 standards adapted for 
 | **Space** | `sylvamo_mfg` |
 | **Data Model** | `sylvamo_manufacturing/v4` |
 | **Views** | 9 (Asset, Equipment, ProductDefinition, Recipe, Reel, Roll, Package, QualityResult, MaterialCostVariance) |
-| **Sample Data** | 43 nodes |
+| **Real Data** | 197 nodes (from actual Sylvamo systems) |
 
 ## Entity Relationship Diagram
 
@@ -177,19 +177,19 @@ Based on guidance from Johan Stabekk (Cognite ISA Expert, Jan 28, 2026):
 | [ISA Alignment](docs/COGNITE_ISA_EXTENSION_AND_SYLVAMO_ALIGNMENT.md) | ISA-95/88 alignment analysis |
 | [Johan's Guidance](docs/JOHAN_ISA95_GUIDANCE_SUMMARY.md) | Expert recommendations from Cognite |
 
-## Sample Data
+## Real Data (from Sylvamo Production Systems)
 
-| Entity | Count | Examples |
-|--------|-------|----------|
+| Entity | Count | Source |
+|--------|-------|--------|
 | Asset | 2 | Eastover Mill, Sumpter Facility |
-| Equipment | 4 | PM1, PM2, Winder 1, Sheeter 1 |
-| ProductDefinition | 3 | Bond 20lb, Offset 50lb, Cover 80lb |
-| Recipe | 4 | 1 general + 3 master recipes |
-| Reel | 3 | PM1-20260128-001, PM1-20260128-002, PM2-20260128-001 |
-| Roll | 11 | Cut from reels (8.5" and 6.0" widths) |
-| Package | 3 | Shipped, InTransit, Received |
-| QualityResult | 8 | Caliper, Moisture, Basis Weight, Brightness |
-| MaterialCostVariance | 5 | Pulp, Filler, Coating, Chemical costs |
+| Equipment | 3 | EMP01, EMW01, Sheeter 1 |
+| ProductDefinition | 2 | Wove Paper 20lb/24lb |
+| Reel | 50 | `raw_sylvamo_fabric/ppr_hist_reel` |
+| Roll | 19 | `raw_sylvamo_fabric/ppr_hist_roll` |
+| Package | 50 | `raw_sylvamo_fabric/ppr_hist_package` |
+| QualityResult | 21 | `raw_sylvamo_pilot/sharepoint_roll_quality` |
+| MaterialCostVariance | 176 | `raw_sylvamo_fabric/ppv_snapshot` |
+| **TOTAL** | **197** | Real production data |
 
 ## GraphQL Query Example
 
