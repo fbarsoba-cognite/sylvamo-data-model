@@ -4,15 +4,69 @@
 
 ---
 
+## Interactive Entity Diagram
+
+Click any entity to jump to its detailed explanation:
+
+| Entity | Description | Jump To |
+|--------|-------------|---------|
+| **Asset** | Mills and facilities | [→ Asset Details](#asset) |
+| **Equipment** | Paper machines, winders, sheeters | [→ Equipment Details](#equipment) |
+| **ProductDefinition** | Paper grades and specifications | [→ ProductDefinition Details](#productdefinition) |
+| **Recipe** | ISA-88 production recipes | [→ Recipe Details](#recipe) |
+| **Reel** | Paper reels (batches) | [→ Reel Details](#reel) |
+| **Roll** | Cut rolls (sellable units) | [→ Roll Details](#roll) |
+| **Package** | Inter-plant transfer bundles | [→ Package Details](#package) |
+| **QualityResult** | Quality test measurements | [→ QualityResult Details](#qualityresult) |
+| **MaterialCostVariance** | Cost and PPV tracking | [→ MaterialCostVariance Details](#materialcostvariance) |
+
+```mermaid
+erDiagram
+    Asset ||--o{ Equipment : "contains"
+    Asset ||--o{ Package : "sourcePlant"
+    Asset ||--o{ Package : "destinationPlant"
+    Equipment ||--o{ Reel : "produces"
+    Equipment ||--o{ Recipe : "runs"
+    ProductDefinition ||--o{ Recipe : "defines"
+    ProductDefinition ||--o{ Reel : "specifies"
+    ProductDefinition ||--o{ MaterialCostVariance : "cost impact"
+    Reel ||--o{ Roll : "cut into"
+    Reel ||--o{ QualityResult : "tested by"
+    Roll ||--o{ QualityResult : "tested by"
+    Roll }o--|| Package : "bundled in"
+```
+
+---
+
 ## The Scenario
 
 **Eastover Mill** produces **20lb Bond Paper** that gets shipped to **Sumpter Facility** for sheeting and distribution. This walkthrough traces a paper order from production to delivery.
 
 ---
 
-## Step 1: Organizational Structure
+## Asset
 
-**Asset → Equipment**
+Mills and facilities that contain production equipment.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| name | Text | Asset name (e.g., "Eastover Mill") |
+| description | Text | Asset description |
+| assetType | Text | Mill, Facility, Warehouse |
+
+**Example:** Eastover Mill is Sylvamo's primary paper production facility.
+
+---
+
+## Equipment
+
+Production equipment within an asset. [↑ Back to diagram](#interactive-entity-diagram)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| name | Text | Equipment name |
+| equipmentType | Text | PaperMachine, Winder, Sheeter |
+| asset | Relation → Asset | Parent facility |
 
 The model starts with the physical hierarchy: mills contain equipment.
 
@@ -38,9 +92,30 @@ The model starts with the physical hierarchy: mills contain equipment.
 
 ---
 
-## Step 2: Product & Recipe Definition
+## ProductDefinition
 
-**ProductDefinition → Recipe → Equipment**
+Paper grade specifications. [↑ Back to diagram](#interactive-entity-diagram)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| productId | Text | Product identifier |
+| name | Text | Product name (e.g., "Wove Paper 20lb") |
+| basisWeight | Float | Basis weight in lb/3000 sq ft |
+
+---
+
+## Recipe
+
+ISA-88 production recipes that define how to make products on equipment. [↑ Back to diagram](#interactive-entity-diagram)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| recipeId | Text | Recipe identifier |
+| name | Text | Recipe name |
+| recipeType | Text | general, site, master, control |
+| targetParameters | JSON | Target quality parameters |
+| productDefinition | Relation | Product this recipe makes |
+| equipment | Relation | Equipment this recipe runs on |
 
 Products define what we make. Recipes define how to make them on specific equipment.
 
@@ -70,9 +145,29 @@ ProductDefinition: "Wove Paper 20lb"
 
 ---
 
-## Step 3: Production
+## Reel
 
-**Equipment → Reel → Roll**
+Paper reels produced by equipment (ISA-95 Batch). [↑ Back to diagram](#interactive-entity-diagram)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| reelNumber | Text | Reel identifier |
+| productionDate | Timestamp | When produced |
+| productDefinition | Relation | Paper grade |
+| equipment | Relation | Machine that produced it |
+
+---
+
+## Roll
+
+Cut rolls from reels (ISA-95 MaterialLot - sellable unit). [↑ Back to diagram](#interactive-entity-diagram)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| rollNumber | Text | Roll identifier |
+| width | Float | Roll width in inches |
+| reel | Relation | Source reel |
+| package | Relation | Package bundled in |
 
 Equipment produces reels (batches). Reels are cut into rolls (sellable units).
 
@@ -106,9 +201,17 @@ PM1 produces Reel EM0010110008 on Jan 15, 2026
 
 ---
 
-## Step 4: Quality Testing
+## QualityResult
 
-**Reel/Roll → QualityResult**
+Quality test measurements on reels and rolls. [↑ Back to diagram](#interactive-entity-diagram)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| testName | Text | Test name (Caliper, Moisture, etc.) |
+| resultValue | Float | Numeric result |
+| isInSpec | Boolean | Pass/fail flag |
+| reel | Relation | Tested reel |
+| roll | Relation | Tested roll |
 
 Quality tests are performed on reels and rolls, with results compared against specifications.
 
@@ -131,9 +234,16 @@ QualityResult tests on Reel EM0010110008:
 
 ---
 
-## Step 5: Packaging & Shipping
+## Package
 
-**Roll → Package → Asset (sourcePlant/destinationPlant)**
+Inter-plant transfer bundles containing rolls. [↑ Back to diagram](#interactive-entity-diagram)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| packageNumber | Text | Package identifier |
+| status | Text | Created, Shipped, InTransit, Received |
+| sourcePlant | Relation → Asset | Origin facility |
+| destinationPlant | Relation → Asset | Destination facility |
 
 Rolls are bundled into packages for inter-plant transfer.
 
@@ -161,9 +271,18 @@ Package EME12G04152F:
 
 ---
 
-## Step 6: Cost Tracking
+## MaterialCostVariance
 
-**ProductDefinition → MaterialCostVariance**
+Purchase price variance (PPV) tracking for raw materials. [↑ Back to diagram](#interactive-entity-diagram)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| material | Text | Material number |
+| materialType | Text | FIBR, RAWM, PKNG, PRD1 |
+| currentPPV | Float | Current period PPV |
+| priorPPV | Float | Prior period PPV |
+| ppvChange | Float | Period-over-period change |
+| productDefinition | Relation | Linked product |
 
 Track purchase price variance (PPV) for raw materials linked to products.
 
