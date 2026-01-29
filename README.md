@@ -11,7 +11,7 @@ The `sylvamo_mfg` data model implements ISA-95 and ISA-88 standards adapted for 
 | Component | Value |
 |-----------|-------|
 | **Space** | `sylvamo_mfg` |
-| **Data Model** | `sylvamo_manufacturing/v6` |
+| **Data Model** | `sylvamo_manufacturing/v7` |
 | **Views** | 9 (Asset, Equipment, ProductDefinition, Recipe, Reel, Roll, Package, QualityResult, MaterialCostVariance) |
 | **View Versions** | All views now use typed relations for GraphQL traversal |
 | **Real Data** | 197 nodes (from actual Sylvamo systems) |
@@ -71,6 +71,7 @@ erDiagram
         string rollNumber PK
         float width
         relation reel FK
+        relation package FK
     }
 
     Package {

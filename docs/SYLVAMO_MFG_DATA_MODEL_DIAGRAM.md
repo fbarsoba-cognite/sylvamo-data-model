@@ -1,7 +1,7 @@
 # Sylvamo Manufacturing Data Model Diagram
 
 **Space:** `sylvamo_mfg`  
-**Data Model:** `sylvamo_manufacturing/v6`  
+**Data Model:** `sylvamo_manufacturing/v7`  
 **Date:** 2026-01-28
 
 ---
@@ -82,6 +82,7 @@ erDiagram
         string status
         string qualityGrade
         relation reel FK
+        relation package FK
     }
 
     Package {

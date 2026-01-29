@@ -2,7 +2,7 @@
 
 **Space:** `sylvamo_mfg`  
 **Data Model:** `sylvamo_manufacturing`  
-**Version:** `v6`  
+**Version:** `v7`  
 **Date:** 2026-01-28
 
 ---
@@ -230,6 +230,7 @@ This data model implements ISA-95/ISA-88 standards for paper manufacturing with 
 | Reel | `productDefinition` | ProductDefinition | N:1 | Reel is a Product |
 | Reel | `equipment` | Equipment | N:1 | Reel made on Equipment |
 | Roll | `reel` | Reel | N:1 | Roll cut from Reel |
+| Roll | `package` | Package | N:1 | Roll bundled in Package |
 | Package | `sourcePlant` | Asset | N:1 | Package originates from Asset |
 | Package | `destinationPlant` | Asset | N:1 | Package destined for Asset |
 | QualityResult | `reel` | Reel | N:1 | Quality test on Reel |
@@ -315,7 +316,7 @@ https://<cluster>.cognitedata.com/api/v1/projects/<project>/models/datamodels/gr
 ```
 space: sylvamo_mfg
 externalId: sylvamo_manufacturing
-version: v6
+version: v7
 ```
 
 ### Example Queries
@@ -417,6 +418,7 @@ version: v6
 | v4 | 2026-01-28 | Added MaterialCostVariance entity |
 | v5 | 2026-01-28 | Fixed view version references |
 | v6 | 2026-01-28 | All typed relations fixed (Package→Asset, Recipe/Reel→Equipment v2) |
+| v7 | 2026-01-28 | Added Roll→Package relation ("bundled in") |
 
 ---
 
