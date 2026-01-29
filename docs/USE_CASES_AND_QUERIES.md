@@ -1,7 +1,7 @@
 # Use Cases & Verified Queries
 
 **Date:** 2026-01-28  
-**Model:** `sylvamo_mfg/sylvamo_manufacturing/v4`  
+**Model:** `sylvamo_mfg/sylvamo_manufacturing/v6`  
 **Status:** All queries verified against **REAL SYLVAMO DATA**
 
 ---

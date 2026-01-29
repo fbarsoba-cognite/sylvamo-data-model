@@ -1,7 +1,7 @@
 # Sylvamo Manufacturing Data Model Diagram
 
 **Space:** `sylvamo_mfg`  
-**Data Model:** `sylvamo_manufacturing/v3`  
+**Data Model:** `sylvamo_manufacturing/v6`  
 **Date:** 2026-01-28
 
 ---
@@ -11,10 +11,13 @@
 ```mermaid
 erDiagram
     Asset ||--o{ Equipment : "contains"
+    Asset ||--o{ Package : "sourcePlant"
+    Asset ||--o{ Package : "destinationPlant"
     Equipment ||--o{ Reel : "produces"
     Equipment ||--o{ Recipe : "runs"
     ProductDefinition ||--o{ Recipe : "defines"
     ProductDefinition ||--o{ Reel : "specifies"
+    ProductDefinition ||--o{ MaterialCostVariance : "cost impact"
     Reel ||--o{ Roll : "cut into"
     Reel ||--o{ QualityResult : "tested by"
     Roll ||--o{ QualityResult : "tested by"
@@ -85,11 +88,21 @@ erDiagram
         string packageNumber PK
         string packageType
         int rollCount
-        string sourcePlant
-        string destinationPlant
+        relation sourcePlant FK
+        relation destinationPlant FK
         string status
         timestamp shippedDate
         timestamp receivedDate
+    }
+
+    MaterialCostVariance {
+        string material PK
+        string materialDescription
+        string materialType
+        float currentPPV
+        float priorPPV
+        float ppvChange
+        relation productDefinition FK
     }
 
     QualityResult {

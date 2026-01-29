@@ -2,7 +2,7 @@
 
 **Space:** `sylvamo_mfg`  
 **Data Model:** `sylvamo_manufacturing`  
-**Version:** `v3`  
+**Version:** `v6`  
 **Date:** 2026-01-28
 
 ---
@@ -186,8 +186,8 @@ This data model implements ISA-95/ISA-88 standards for paper manufacturing with 
 | `packageNumber` | Text | Yes | Package identifier |
 | `packageType` | Text | No | Package type |
 | `rollCount` | Integer | No | Number of rolls in package |
-| `sourcePlant` | Text | No | Origin plant |
-| `destinationPlant` | Text | No | Destination plant |
+| `sourcePlant` | DirectRelation → Asset | No | Origin plant (typed relation) |
+| `destinationPlant` | DirectRelation → Asset | No | Destination plant (typed relation) |
 | `status` | Text | No | Status: Created, Shipped, InTransit, Received |
 | `createdDate` | Timestamp | No | Package creation date |
 | `shippedDate` | Timestamp | No | Ship date |
@@ -230,8 +230,11 @@ This data model implements ISA-95/ISA-88 standards for paper manufacturing with 
 | Reel | `productDefinition` | ProductDefinition | N:1 | Reel is a Product |
 | Reel | `equipment` | Equipment | N:1 | Reel made on Equipment |
 | Roll | `reel` | Reel | N:1 | Roll cut from Reel |
+| Package | `sourcePlant` | Asset | N:1 | Package originates from Asset |
+| Package | `destinationPlant` | Asset | N:1 | Package destined for Asset |
 | QualityResult | `reel` | Reel | N:1 | Quality test on Reel |
 | QualityResult | `roll` | Roll | N:1 | Quality test on Roll |
+| MaterialCostVariance | `productDefinition` | ProductDefinition | N:1 | Cost linked to Product |
 
 ---
 
@@ -312,7 +315,7 @@ https://<cluster>.cognitedata.com/api/v1/projects/<project>/models/datamodels/gr
 ```
 space: sylvamo_mfg
 externalId: sylvamo_manufacturing
-version: v3
+version: v6
 ```
 
 ### Example Queries
@@ -379,15 +382,21 @@ version: v3
 }
 ```
 
-#### Get packages with roll details
+#### Get packages with plant details (typed relations)
 ```graphql
 {
   listPackage {
     items {
       packageNumber
       status
-      sourcePlant
-      destinationPlant
+      sourcePlant {
+        name
+        assetType
+      }
+      destinationPlant {
+        name
+        assetType
+      }
       rollCount
       shippedDate
       receivedDate
@@ -405,6 +414,9 @@ version: v3
 | v1 | 2026-01-28 | Initial model with 7 views |
 | v2 | 2026-01-28 | Added Recipe entity |
 | v3 | 2026-01-28 | Added typed relations for diagram visualization |
+| v4 | 2026-01-28 | Added MaterialCostVariance entity |
+| v5 | 2026-01-28 | Fixed view version references |
+| v6 | 2026-01-28 | All typed relations fixed (Package→Asset, Recipe/Reel→Equipment v2) |
 
 ---
 

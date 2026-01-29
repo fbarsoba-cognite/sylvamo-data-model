@@ -11,8 +11,9 @@ The `sylvamo_mfg` data model implements ISA-95 and ISA-88 standards adapted for 
 | Component | Value |
 |-----------|-------|
 | **Space** | `sylvamo_mfg` |
-| **Data Model** | `sylvamo_manufacturing/v4` |
+| **Data Model** | `sylvamo_manufacturing/v6` |
 | **Views** | 9 (Asset, Equipment, ProductDefinition, Recipe, Reel, Roll, Package, QualityResult, MaterialCostVariance) |
+| **View Versions** | All views now use typed relations for GraphQL traversal |
 | **Real Data** | 197 nodes (from actual Sylvamo systems) |
 
 ## Entity Relationship Diagram
@@ -20,6 +21,8 @@ The `sylvamo_mfg` data model implements ISA-95 and ISA-88 standards adapted for 
 ```mermaid
 erDiagram
     Asset ||--o{ Equipment : "contains"
+    Asset ||--o{ Package : "sourcePlant"
+    Asset ||--o{ Package : "destinationPlant"
     Equipment ||--o{ Reel : "produces"
     Equipment ||--o{ Recipe : "runs"
     ProductDefinition ||--o{ Recipe : "defines"
@@ -73,8 +76,8 @@ erDiagram
     Package {
         string packageNumber PK
         string status
-        string sourcePlant
-        string destinationPlant
+        relation sourcePlant FK
+        relation destinationPlant FK
     }
 
     QualityResult {
@@ -119,6 +122,8 @@ flowchart TB
     end
 
     Asset --> Equipment
+    Asset -.->|sourcePlant| Package
+    Asset -.->|destinationPlant| Package
     Equipment --> Reel
     Equipment --> Recipe
     ProductDefinition --> Recipe
