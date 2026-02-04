@@ -218,9 +218,23 @@ Based on guidance from Johan Stabekk (Cognite ISA Expert, Jan 28, 2026):
 
 | Workstream | Focus | Status |
 |------------|-------|--------|
-| Search Experience | Link Events, Files, TimeSeries to Assets | In Progress |
+| Search Experience | Link Events, Files, TimeSeries to Assets | **6/9 Done** |
 | UC2 Data Quality | Reel/Roll scheduling, turnupTime, quality data | Investigation |
 | Data Completeness | PPR limits, Sumter assets, PPV source | Blocked (SAP freeze) |
+
+### Search Experience Progress
+
+| Task | Story | Status | Result |
+|------|-------|--------|--------|
+| Proficy Events → Assets | SVQS-148 | Done | PM1/PM2 linked via PU_Id |
+| Work Orders → Assets | SVQS-146 | Done | Linked via FUNCTIONAL_LOCATION |
+| Time Series → Assets | SVQS-143 | Done | 3,390 linked (1,695 PM1 + 1,695 PM2) |
+| Files → Assets | SVQS-152 | Done | 45 linked to Eastover Mill |
+| Files reverse relation | SVQS-151 | Done | Asset.files enabled |
+| ProductionEvent | SVQS-150 | Closed | Duplicate of SVQS-148 |
+| P&ID Contextualization | SVQS-144 | Pending | - |
+| Event Type Field | SVQS-145 | Pending | - |
+| Validation Demo | SVQS-159 | Pending | - |
 
 **[See Full Sprint 2 Plan →](docs/SPRINT_2_PLAN.md)** | **[Story Mapping →](docs/SPRINT_2_STORY_MAPPING.md)**
 

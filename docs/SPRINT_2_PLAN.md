@@ -370,23 +370,23 @@ Test in Cognite Fusion:
 
 ### Search Experience (Elise)
 
-| Task | File | Status |
-|------|------|--------|
-| Proficy Events → Asset | `populate_Event_Proficy.Transformation.sql` | ⬜ Ready |
-| Production Orders → Asset | `populate_Event_ProductionOrders.Transformation.sql` | 🔴 BLOCKED |
-| WorkOrder Extended → Asset | `populate_WorkOrder.Transformation.sql` | ⬜ Ready |
-| ProductionEvent → Asset | `populate_ProductionEvent.Transformation.sql` | ⬜ Ready |
-| TimeSeries → Asset | `populate_TimeSeries.Transformation.sql` | ⬜ Ready |
-| Asset `files` reverse relation | `Asset.View.yaml` | ⬜ Ready |
-| Files → Asset | `populate_Files.Transformation.sql` | ⬜ Ready |
-| P&ID Entity Matching | `annotate_files.py` | ⬜ Ready |
-| Validation | Cognite Fusion Search | ⬜ Ready |
+| Task | File | Status | Result |
+|------|------|--------|--------|
+| Proficy Events → Asset | `populate_Event_Proficy.Transformation.sql` | ✅ **Done** | PM1/PM2 linked via PU_Id |
+| Production Orders → Asset | `populate_Event_ProductionOrders.Transformation.sql` | 🔴 BLOCKED | No plant field |
+| WorkOrder → Asset | `populate_Event_WorkOrders.Transformation.sql` | ✅ **Done** | Linked via FUNCTIONAL_LOCATION |
+| ProductionEvent → Asset | `populate_ProductionEvent.Transformation.sql` | ✅ Duplicate | Closed (same as SVQS-148) |
+| TimeSeries → Asset | `populate_TimeSeries.Transformation.sql` | ✅ **Done** | 3,390 linked (1,695 PM1 + 1,695 PM2) |
+| Asset `files` reverse relation | `Asset.View.yaml` | ✅ **Done** | Asset.files enabled |
+| Files → Asset | `populate_Files.Transformation.sql` | ✅ **Done** | 45 linked to Eastover Mill |
+| P&ID Entity Matching | `annotate_files.py` | ⬜ Pending | - |
+| Validation | Cognite Fusion Search | ⬜ Pending | - |
 
 ### UC2 Data Quality (Anvar)
 
 | Task | Status |
 |------|--------|
-| Reel/Roll scheduling | ⬜ Ready |
+| Reel/Roll scheduling | ⬜ Pending |
 | turnupTime property | 🔍 Investigation |
 | Property naming review | 🔍 Discussion needed |
 | Sumter quality data | 🔍 Investigation |
