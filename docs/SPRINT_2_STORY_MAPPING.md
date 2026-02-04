@@ -1,136 +1,60 @@
 # Sprint 2 User Story Mapping
 
 **Updated:** February 4, 2026  
-**Purpose:** Map Sprint 2 plan phases to Jira user stories
+**Status:** 🟢 6 Done | 🟡 7 Pending | 🔴 2 Blocked | ⚫ 2 Closed
 
 ---
 
-## Story Mapping Overview
+## Story Status
 
-| Plan Phase | Work Item | Jira Story | Status |
-|------------|-----------|------------|--------|
-| **Phase 1: Event Contextualization** | | | |
-| 1.1 | Proficy Events → Asset | [SVQS-148](https://cognitedata.atlassian.net/browse/SVQS-148) | **Done** |
-| 1.2 | Production Orders → Asset | BLOCKED - No plant field in source | N/A |
-| 1.3 | WorkOrder Extended → Asset | [SVQS-146](https://cognitedata.atlassian.net/browse/SVQS-146) (SVQS-149 closed as duplicate) | **Done** |
-| 1.4 | ProductionEvent → Asset | [SVQS-150](https://cognitedata.atlassian.net/browse/SVQS-150) | **Closed (Duplicate of SVQS-148)** |
-| 1.5 | Verify Event Type Field | [SVQS-145](https://cognitedata.atlassian.net/browse/SVQS-145) | Pending |
-| **Phase 2: Time Series Contextualization** | | | |
-| 2.1 | TimeSeries → Asset | [SVQS-143](https://cognitedata.atlassian.net/browse/SVQS-143) | **Done** |
-| **Phase 3: File Contextualization** | | | |
-| 3.1 | Add files reverse relation | [SVQS-151](https://cognitedata.atlassian.net/browse/SVQS-151) | **Done** |
-| 3.2 | Files → Asset link | [SVQS-152](https://cognitedata.atlassian.net/browse/SVQS-152) | **Done** |
-| 3.3 | P&ID Entity Matching | [SVQS-144](https://cognitedata.atlassian.net/browse/SVQS-144) | Pending |
-| **Phase 4: Validation** | | | |
-| 4.1-4.2 | End-to-End Demo | [SVQS-159](https://cognitedata.atlassian.net/browse/SVQS-159) | Pending |
-| **Phase 5: UC2 Data Quality** | | | |
-| 5.1 | Reel/Roll Scheduling | [SVQS-153](https://cognitedata.atlassian.net/browse/SVQS-153) | Pending |
-| 5.2 | turnupTime Property | [SVQS-154](https://cognitedata.atlassian.net/browse/SVQS-154) | Pending |
-| 5.3 | Property Naming | Discussion with Anvar | No story needed |
-| 5.4 | Sumter Quality Data | Part of [SVQS-147](https://cognitedata.atlassian.net/browse/SVQS-147) investigation | Pending |
-| **Phase 6: Data Completeness** | | | |
-| 6.1 | PPR Roll Limit | [SVQS-155](https://cognitedata.atlassian.net/browse/SVQS-155) | Pending |
-| 6.2 | Missing PPR Tables | [SVQS-156](https://cognitedata.atlassian.net/browse/SVQS-156) | Pending |
-| 6.3 | PPV Wrong Source | BLOCKED - SAP freeze until Thursday | N/A |
-| 6.4 | Sumter Assets | [SVQS-157](https://cognitedata.atlassian.net/browse/SVQS-157) | Pending |
-| 6.5 | Asset Search Field | [SVQS-158](https://cognitedata.atlassian.net/browse/SVQS-158) | Pending |
+| Story | Description | Status | Notes |
+|-------|-------------|--------|-------|
+| ~~[SVQS-143](https://cognitedata.atlassian.net/browse/SVQS-143)~~ | PI Time Series → Assets | 🟢 Done | 3,492 linked (PM1/PM2) |
+| ~~[SVQS-145](https://cognitedata.atlassian.net/browse/SVQS-145)~~ | Event Type Field | 🟢 Done | Filtering works |
+| ~~[SVQS-146](https://cognitedata.atlassian.net/browse/SVQS-146)~~ | Work Orders → Assets | 🟢 Done | Via FUNCTIONAL_LOCATION |
+| ~~[SVQS-148](https://cognitedata.atlassian.net/browse/SVQS-148)~~ | Proficy Events → Assets | 🟢 Done | PU_Id mapping |
+| ~~[SVQS-151](https://cognitedata.atlassian.net/browse/SVQS-151)~~ | Files Reverse Relation | 🟢 Done | Asset.files enabled |
+| ~~[SVQS-152](https://cognitedata.atlassian.net/browse/SVQS-152)~~ | Files → Assets | 🟢 Done | 45 files linked |
+| [SVQS-144](https://cognitedata.atlassian.net/browse/SVQS-144) | P&ID Contextualization | 🔴 Blocked | Needs SVQS-158 first |
+| [SVQS-147](https://cognitedata.atlassian.net/browse/SVQS-147) | UC2 Streamlit Demo | 🟡 Pending | Anvar owns |
+| [SVQS-153](https://cognitedata.atlassian.net/browse/SVQS-153) | Reel/Roll Scheduling | 🟡 Pending | Use CDF Transformation Schedules |
+| [SVQS-154](https://cognitedata.atlassian.net/browse/SVQS-154) | turnupTime Property | 🟡 Pending | Investigate PPR data |
+| [SVQS-155](https://cognitedata.atlassian.net/browse/SVQS-155) | PPR Roll Limit | 🟡 Pending | Rashad/Max - need 2M rows |
+| [SVQS-156](https://cognitedata.atlassian.net/browse/SVQS-156) | Missing PPR Tables | 🟡 Pending | Rashad/Max |
+| [SVQS-157](https://cognitedata.atlassian.net/browse/SVQS-157) | Sumter Assets | 🔴 Blocked | No RAW data yet |
+| [SVQS-158](https://cognitedata.atlassian.net/browse/SVQS-158) | Asset Search Field | 🟡 Pending | Valmir query → Rashad |
+| [SVQS-159](https://cognitedata.atlassian.net/browse/SVQS-159) | Validation Demo | 🟡 Pending | Can start now |
+| ~~[SVQS-149](https://cognitedata.atlassian.net/browse/SVQS-149)~~ | ~~WorkOrder Extended~~ | ⚫ Closed | Duplicate of SVQS-146 |
+| ~~[SVQS-150](https://cognitedata.atlassian.net/browse/SVQS-150)~~ | ~~ProductionEvent~~ | ⚫ Closed | Duplicate of SVQS-148 |
 
 ---
 
-## Implementation Results
+## Demo Readiness (Feb 13, 2026)
 
-### Completed Contextualization (Feb 4, 2026)
+- [x] Work orders → assets (SVQS-146)
+- [x] Proficy events → assets (SVQS-148)
+- [x] Time series → assets (SVQS-143)
+- [x] Event type filtering (SVQS-145)
+- [x] Files → assets (SVQS-151/152)
+- [ ] P&ID contextualization (SVQS-144) - **Blocked**
+- [ ] UC2 Streamlit (SVQS-147)
+- [ ] Search validation (SVQS-159)
 
-| Story | Implementation | Validation |
-|-------|----------------|------------|
-| **SVQS-143** | Updated `populate_TimeSeries.Transformation.sql` with PI tag prefix mapping (471* → PM1, 472* → PM2) | 3,390 time series linked (1,695 PM1 + 1,695 PM2) |
-| **SVQS-146** | Updated `populate_Event_WorkOrders.Transformation.sql` to link via FUNCTIONAL_LOCATION | Work orders linked to Eastover assets |
-| **SVQS-148** | Updated `populate_Event_Proficy.Transformation.sql` with PU_Id mapping (4 → PM1, 5 → PM2) | Events linked to PM1/PM2 assets |
-| **SVQS-151** | Confirmed `files` reverse relation in Asset.View.yaml | Asset.files navigation enabled |
-| **SVQS-152** | Updated `populate_Files.Transformation.sql` to link Eastover files via directory path | 45 files linked to Eastover Mill |
-
----
-
-## Existing Stories (SVQS-142 to SVQS-147)
-
-### SVQS-142: Deliver Data Model V1 to support Use Case 2 development
-**Mapping:** Epic/parent story covering UC2 data model work
-**Dependencies:** Phase 1-3 contextualization must complete for full model
-
-### SVQS-143: Contextualize PI scanner tags for Use Case 2
-**Mapping:** Phase 2.1 - TimeSeries → Asset
-**Implementation:** Update `populate_TimeSeries.Transformation.sql` with PI tag prefix parsing
-
-### SVQS-144: Contextualize 2-3 P&ID documents (major equipment only)
-**Mapping:** Phase 3.3 - P&ID Entity Matching
-**Implementation:** Run `annotate_files.py` with tokenization fix
-
-### SVQS-145: Add type field to Events for filtering in Search
-**Mapping:** Phase 1.5 - Verify Event Type Field
-**Implementation:** Verify `eventType` values in all event transformations
-
-### SVQS-146: Contextualize work orders to major equipment assets
-**Mapping:** Phase 1.3 - WorkOrder Extended → Asset
-**Implementation:** Enable FUNCTIONAL_LOCATION in `populate_WorkOrder.Transformation.sql`
-
-### SVQS-147: Demonstrate Use Case 2 progress via Streamlit diagnostic app
-**Mapping:** UC2 Demo (Anvar's Streamlit app)
-**Dependencies:** Needs Phase 5 data quality issues resolved
+**Progress: 6/8 complete**
 
 ---
 
-## New Stories Created (11 active, 1 duplicate closed)
+## Blockers
 
-### Phase 1: Event Contextualization (2 active stories)
-1. [SVQS-148](https://cognitedata.atlassian.net/browse/SVQS-148) - Contextualize Proficy Events to Paper Machine Assets
-2. ~~[SVQS-149](https://cognitedata.atlassian.net/browse/SVQS-149) - Enable WorkOrder Extended Asset Relation~~ **CLOSED as duplicate of SVQS-146**
-3. [SVQS-150](https://cognitedata.atlassian.net/browse/SVQS-150) - Enable ProductionEvent Asset Relation (mfg_extended)
-
-### Phase 3: File Contextualization (2 stories)
-4. [SVQS-151](https://cognitedata.atlassian.net/browse/SVQS-151) - Add Files Reverse Relation to Asset View
-5. [SVQS-152](https://cognitedata.atlassian.net/browse/SVQS-152) - Link Files to Assets via Metadata Parsing
-
-### Phase 4: Validation (1 story)
-6. [SVQS-159](https://cognitedata.atlassian.net/browse/SVQS-159) - Validate Search Experience: End-to-End Demo
-
-### Phase 5: UC2 Data Quality (2 stories)
-7. [SVQS-153](https://cognitedata.atlassian.net/browse/SVQS-153) - UC2: Add Schedule Configuration for Reel/Roll Transformations
-8. [SVQS-154](https://cognitedata.atlassian.net/browse/SVQS-154) - UC2: Investigate and Add turnupTime Property to Reel
-
-### Phase 6: Data Completeness (4 stories)
-9. [SVQS-155](https://cognitedata.atlassian.net/browse/SVQS-155) - Data Completeness: Fix PPR Roll Extractor Limit
-10. [SVQS-156](https://cognitedata.atlassian.net/browse/SVQS-156) - Data Completeness: Add Missing PPR Tables to Extractor
-11. [SVQS-157](https://cognitedata.atlassian.net/browse/SVQS-157) - Data Completeness: Add Sumter Assets to Hierarchy
-12. [SVQS-158](https://cognitedata.atlassian.net/browse/SVQS-158) - Data Completeness: Add Asset Search Field for P&ID Matching
-
----
-
-## Blocked Items
-
-| Item | Reason | Resolution |
-|------|--------|------------|
-| Production Orders → Asset | No plant/work_center field in `raw_ext_sap.production_orders` | Check if SAP OData can expose these fields |
-| PPV Data Source | SAP freeze until Thursday | Wait for freeze to end, then update source |
-
----
-
-## Demo Readiness Checklist
-
-For Sprint 2 demo (Feb 13, 2026), must have:
-
-- [x] Work orders linked to assets (SVQS-146) - **DONE**
-- [x] Proficy events linked to assets (SVQS-148) - **DONE**
-- [x] Time series linked to assets (SVQS-143) - **DONE** (3,390 linked)
-- [x] Files linked to assets (SVQS-151/152) - **DONE** (45 linked)
-- [ ] 2-3 P&IDs contextualized (SVQS-144)
-- [ ] Event type filtering working (SVQS-145)
-- [ ] UC2 Streamlit progress (SVQS-147)
-- [ ] Search experience validated (SVQS-159)
+| Item | Reason | Owner | Resolution |
+|------|--------|-------|------------|
+| [SVQS-144](https://cognitedata.atlassian.net/browse/SVQS-144) (P&ID) | Missing "search field" for matching | Valmir | Complete [SVQS-158](https://cognitedata.atlassian.net/browse/SVQS-158) first |
+| [SVQS-157](https://cognitedata.atlassian.net/browse/SVQS-157) (Sumter) | No data in RAW (only Eastover 0769) | Rashad/Max | Run SAP query with plant 0519 |
+| PPV Data | SAP freeze | Cam | Wait until Thursday |
 
 ---
 
 ## Related Documents
 
-- [Sprint 2 Plan (GitHub)](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/SPRINT_2_PLAN.md)
-- [Sprint 2 Tasks Breakdown JSON](./sprint_2_tasks_breakdown.json)
-- [Original User Stories](./sprint_2_user_stories.md)
+- [Sprint 2 Plan](./SPRINT_2_PLAN.md)
+- [Data Completeness Meeting (Feb 4)](./meetings/2026-02-04_data_completeness_summary.md)
