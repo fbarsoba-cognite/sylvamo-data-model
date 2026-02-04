@@ -20,15 +20,46 @@ User searches for "Paper Machine 1" in CDF Search
         └── Child Assets: Winders, equipment hierarchy
 ```
 
-### How Stories Enable This
+### Experience Breakdown
 
-| Capability | Stories | What It Enables |
-|------------|---------|-----------------|
-| **Events on Assets** | SVQS-146, SVQS-148 | See work orders and production events when viewing PM1/PM2 |
-| **Event Filtering** | SVQS-145 | Filter events by type (maintenance vs. production) |
-| **Time Series on Assets** | SVQS-143 | See PI scanner data and Proficy readings on PM1/PM2 |
-| **Files on Assets** | SVQS-151, SVQS-152 | See P&IDs and documents when viewing Eastover Mill |
-| **P&ID Navigation** | SVQS-144 | Click equipment in P&ID → jump to asset (blocked) |
+#### 1. Events on Assets
+**User Experience:** When viewing PM1 or PM2, the user sees a list of related events (work orders, production orders) in the Events panel.
+
+| What's Needed | Story | Status | Implementation |
+|---------------|-------|--------|----------------|
+| Work orders linked to assets | [SVQS-146](https://cognitedata.atlassian.net/browse/SVQS-146) | 🟢 Done | Parse `FUNCTIONAL_LOCATION` field (e.g., `0769-06-01-010` → PM1) |
+| Production events linked to assets | [SVQS-148](https://cognitedata.atlassian.net/browse/SVQS-148) | 🟢 Done | Map Proficy `PU_Id` (4 → PM1, 5 → PM2) |
+| Filter events by type | [SVQS-145](https://cognitedata.atlassian.net/browse/SVQS-145) | 🟢 Done | Populate `eventType` property in all event transformations |
+
+#### 2. Time Series on Assets
+**User Experience:** When viewing PM1 or PM2, the user sees linked time series (PI scanner data, Proficy readings) with sparkline previews.
+
+| What's Needed | Story | Status | Implementation |
+|---------------|-------|--------|----------------|
+| PI tags linked to assets | [SVQS-143](https://cognitedata.atlassian.net/browse/SVQS-143) | 🟢 Done | Parse PI tag prefix (`471*` → PM1, `472*` → PM2) |
+| Proficy/lab data linked | [SVQS-143](https://cognitedata.atlassian.net/browse/SVQS-143) | 🟢 Done | Parse name pattern ("Paper Machine 1/2" in name) |
+
+**Result:** 3,492 time series now linked to PM1/PM2.
+
+#### 3. Files on Assets
+**User Experience:** When viewing Eastover Mill or child assets, the user sees P&IDs and engineering drawings in the Files panel.
+
+| What's Needed | Story | Status | Implementation |
+|---------------|-------|--------|----------------|
+| Asset view shows files | [SVQS-151](https://cognitedata.atlassian.net/browse/SVQS-151) | 🟢 Done | Add `files` reverse relation to Asset view |
+| Files linked to assets | [SVQS-152](https://cognitedata.atlassian.net/browse/SVQS-152) | 🟢 Done | Parse directory path (`/Eastover/` → Eastover Mill) |
+
+**Result:** 45 files now linked to Eastover Mill.
+
+#### 4. P&ID Navigation (Blocked)
+**User Experience:** When viewing a P&ID, the user can click on equipment labels to navigate directly to the asset.
+
+| What's Needed | Story | Status | Implementation |
+|---------------|-------|--------|----------------|
+| Asset "search field" for matching | [SVQS-158](https://cognitedata.atlassian.net/browse/SVQS-158) | 🟡 Pending | Valmir's query → Rashad materializes → add to asset hierarchy |
+| P&ID entity extraction | [SVQS-144](https://cognitedata.atlassian.net/browse/SVQS-144) | 🔴 Blocked | Run `annotate_files.py` on P&IDs (needs SVQS-158 first) |
+
+**Blocker:** P&ID codes don't match current asset external IDs. Need new "search field" column from Valmir's SAP query.
 
 ---
 
