@@ -4,6 +4,40 @@
 
 ---
 
+## PRESENTATION FLOW TRACKER
+
+Use this to track where you are. Check off each section as you complete it.
+
+| # | Section | Time | Status |
+|---|---------|------|--------|
+| 0 | [Framing (internal)](#framing-how-to-position-this-meeting) | - | ⬜ |
+| 1 | [Opening](#slide-opening) | 2 min | ⬜ |
+| 2 | [What's Already Done](#slide-whats-already-done-cognite-setup) | 3 min | ⬜ |
+| 3 | [Live Demo - Repo](#slide-live-demo---the-repository) | 5 min | ⬜ |
+| 4 | [Live Demo - PR Workflow](#slide-live-demo---a-pr-workflow) | 5 min | ⬜ |
+| 5 | [What YOUR Team Owns](#slide-what-your-team-owns) | 2 min | ⬜ |
+| 6 | [Action Items](#your-action-items) | 8 min | ⬜ |
+| 7 | [Developer Workflow](#slide-the-workflow-your-developers-will-follow) | 3 min | ⬜ |
+| 8 | [Quick Reference](#slide-quick-reference---what-we-covered) | 2 min | ⬜ |
+| 9 | [Questions & Next Steps](#slide-questions--next-steps) | 5 min | ⬜ |
+| | **TOTAL** | **~35 min** | |
+
+---
+
+## LINKS TO HAVE OPEN (Prep Before Meeting)
+
+Open these tabs before the meeting starts:
+
+| Tab | URL | When to Show |
+|-----|-----|--------------|
+| **ADO Repo** | [Industrial-Data-Landscape-IDL](https://dev.azure.com/SylvamoCorp/_git/Industrial-Data-Landscape-IDL) | Slides 3, 4 |
+| **ADO Variable Groups** | Project Settings → Pipelines → Library | Slide 3 |
+| **ADO Pipelines** | Pipelines section | Slide 4 |
+| **GitHub Docs** | [CICD_OVERVIEW.md](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/CICD_OVERVIEW.md) | Reference if needed |
+| **GitHub README** | [sylvamo-data-model](https://github.com/fbarsoba-cognite/sylvamo-data-model#cicd-for-cdf) | Reference if needed |
+
+---
+
 ## FRAMING: How to Position This Meeting
 
 **INTERNAL NOTE (don't say this out loud):**
@@ -19,6 +53,12 @@ Avoid making it sound like "we did everything, you're done." Instead: "we set up
 
 ## SLIDE: Opening
 
+**⏱️ ~2 minutes**
+
+**📺 SHOW:** Title slide or just your face (no screen share yet)
+
+**📄 GITHUB REF:** [CICD_OVERVIEW.md - TL;DR section](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/CICD_OVERVIEW.md#cicd-for-cognite-data-fusion-cdf)
+
 **SPEAKER NOTES:**
 
 Thanks for joining. Today I want to walk you through the CI/CD setup we've put in place for CDF deployments.
@@ -33,6 +73,12 @@ By the end, you'll have a clear picture of the system and know exactly what acti
 ---
 
 ## SLIDE: What's Already Done (Cognite Setup)
+
+**⏱️ ~3 minutes**
+
+**📺 SHOW:** Can share screen now - show the table below or a simple slide
+
+**📄 GITHUB REF:** [CICD_OVERVIEW.md - Tech Stack](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/CICD_OVERVIEW.md#the-cicd-tech-stack)
 
 **SPEAKER NOTES:**
 
@@ -58,6 +104,19 @@ Let me show you where everything lives...
 ---
 
 ## SLIDE: Live Demo - The Repository
+
+**⏱️ ~5 minutes**
+
+**📺 NAVIGATE TO:** [ADO Repo - Industrial-Data-Landscape-IDL](https://dev.azure.com/SylvamoCorp/_git/Industrial-Data-Landscape-IDL)
+
+**📄 GITHUB REF:** [CICD_OVERVIEW.md - Repository Structure](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/CICD_OVERVIEW.md#repository-structure)
+
+**SHOW IN ORDER:**
+1. Root folder structure → `sylvamo/` directory
+2. Config files → `config.dev.yaml`, `config.staging.yaml`, `config.prod.yaml`
+3. Modules folder → `sylvamo/modules/`
+4. Pipeline files → `.devops/` folder
+5. Variable Groups → Project Settings → Pipelines → Library
 
 **SPEAKER NOTES:**
 
@@ -85,6 +144,21 @@ And here are the Variable Groups we created - `dev-toolkit-credentials`. This co
 
 ## SLIDE: Live Demo - A PR Workflow
 
+**⏱️ ~5 minutes**
+
+**📺 NAVIGATE TO:** ADO Pipelines → Find a recent pipeline run (or create a PR beforehand)
+
+**📄 GITHUB REF:** [CICD_OVERVIEW.md - CI/CD Flow](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/CICD_OVERVIEW.md#cicd-flow-overview)
+
+**SHOW IN ORDER:**
+1. A PR (existing or create one before meeting)
+2. Pipeline run triggered by the PR
+3. `cdf build` step output
+4. `cdf deploy --dry-run` output (the key part!)
+5. Show that nothing changed in CDF yet
+
+**💡 TIP:** Create a dummy PR before the meeting so you have a clean example to show.
+
 **SPEAKER NOTES:**
 
 Let me show you what happens when someone makes a change.
@@ -111,6 +185,14 @@ This is the workflow your developers will use every day.
 
 ## SLIDE: What YOUR Team Owns
 
+**⏱️ ~2 minutes**
+
+**📺 SHOW:** Transition slide - "What You Own" or just say it
+
+**📄 GITHUB REF:** [CICD_OVERVIEW.md - Key Takeaways](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/CICD_OVERVIEW.md#key-takeaways-for-platform-teams)
+
+**🎯 THIS IS THE KEY TRANSITION:** Shift from "show and tell" to "your responsibilities"
+
 **SPEAKER NOTES:**
 
 Now let's talk about what your team is responsible for going forward. We built the foundation, but **you own the system now**.
@@ -120,6 +202,14 @@ Here's what falls under your team's responsibility:
 ---
 
 ## YOUR ACTION ITEMS
+
+**⏱️ ~8 minutes (spend ~1 min per item)**
+
+**📺 SHOW:** The action items list (you can screen share this doc or a slide)
+
+**📄 GITHUB REF:** See [Cheat Sheet](#cheat-sheet-action-items-summary) at the bottom for quick reference
+
+**🎯 GOAL:** They should leave knowing exactly what THEY need to do
 
 **SPEAKER NOTES:**
 
@@ -221,6 +311,14 @@ Let me be specific about what you need to do:
 
 ## SLIDE: The Workflow Your Developers Will Follow
 
+**⏱️ ~3 minutes**
+
+**📺 SHOW:** The workflow diagram below (can share this doc)
+
+**📄 GITHUB REF:** [CICD_OVERVIEW.md - CI/CD Flow diagram](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/CICD_OVERVIEW.md#cicd-flow-overview)
+
+**🎯 GOAL:** Simple mental model they can explain to their developers
+
 **SPEAKER NOTES:**
 
 Let me summarize the day-to-day workflow for your developers:
@@ -242,6 +340,14 @@ The key mindset shift: **no more manual changes in the CDF UI**. If it's not in 
 ---
 
 ## SLIDE: Quick Reference - What We Covered
+
+**⏱️ ~2 minutes**
+
+**📺 SHOW:** Summary slide or the recap below
+
+**📄 GITHUB REF:** [README - CI/CD for CDF section](https://github.com/fbarsoba-cognite/sylvamo-data-model#cicd-for-cdf)
+
+**🎯 GOAL:** Reinforce the done vs. their responsibility split
 
 **SPEAKER NOTES:**
 
@@ -270,6 +376,16 @@ Let me recap:
 
 ## SLIDE: Questions & Next Steps
 
+**⏱️ ~5 minutes**
+
+**📺 SHOW:** The checklist below (can share this doc or send afterward)
+
+**📄 SEND AFTER MEETING:** 
+- Link to this doc: [CICD_SPEAKER_NOTES.md](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/CICD_SPEAKER_NOTES.md)
+- Or just the [Cheat Sheet](#cheat-sheet-action-items-summary)
+
+**🎯 GOAL:** Confirm who owns what, get verbal commitment on timelines
+
 **SPEAKER NOTES:**
 
 Before we wrap up, let me confirm next steps:
@@ -292,6 +408,10 @@ Any questions?
 ---
 
 ## APPENDIX: Technical Details (If They Ask)
+
+**📄 GITHUB REF:** [CICD_OVERVIEW.md - Authentication Model](https://github.com/fbarsoba-cognite/sylvamo-data-model/blob/main/docs/CICD_OVERVIEW.md#authentication-model)
+
+**💡 USE ONLY IF:** Someone asks technical questions about auth, secrets, or commands. Don't present this proactively.
 
 ### How Authentication Works
 
