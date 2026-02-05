@@ -1,6 +1,8 @@
-# Sylvamo Manufacturing Data Model
+# Sylvamo Cognite Project
 
-**ISA-95/ISA-88 aligned data model for paper manufacturing**
+**CDF implementation for Sylvamo paper manufacturing operations**
+
+> ISA-95/ISA-88 aligned data model for paper manufacturing
 
 This repository contains the data model specification for Sylvamo's manufacturing operations in Cognite Data Fusion (CDF).
 
@@ -187,7 +189,7 @@ flowchart TB
 | Recipe Compliance | Target vs Actual quality comparison | ✅ Verified |
 | Production Dashboard | Summary metrics across all entities | ✅ Verified |
 
-**[See Full Query Examples →](docs/USE_CASES_AND_QUERIES.md)**
+**[See Full Query Examples →](docs/reference/use-cases/USE_CASES_AND_QUERIES.md)**
 
 ### Use Case 1: Material Cost & PPV Analysis ✅
 **Objective:** Track purchase price variance for raw materials and link to products.
@@ -198,7 +200,7 @@ flowchart TB
 | Product Cost Impact | Link costs to ProductDefinition | ✅ Verified |
 | Period-over-Period | Compare current vs prior costs | ✅ Verified |
 
-**[See Full Query Examples →](docs/USE_CASES_AND_QUERIES.md)**
+**[See Full Query Examples →](docs/reference/use-cases/USE_CASES_AND_QUERIES.md)**
 
 ---
 
@@ -236,26 +238,35 @@ Based on guidance from Johan Stabekk (Cognite ISA Expert, Jan 28, 2026):
 | Event Type Field | SVQS-145 | Pending | - |
 | Validation Demo | SVQS-159 | Pending | - |
 
-**[See Full Sprint 2 Plan →](docs/SPRINT_2_PLAN.md)** | **[Story Mapping →](docs/SPRINT_2_STORY_MAPPING.md)**
+**[See Full Sprint 2 Plan →](docs/internal/sprint-planning/SPRINT_2_PLAN.md)** | **[Story Mapping →](docs/internal/sprint-planning/SPRINT_2_STORY_MAPPING.md)**
 
 ## Documentation
 
+**[Full Documentation Index →](docs/README.md)**
+
+### Reference Documentation (Polished)
+
 | Document | Description |
 |----------|-------------|
-| [**Sprint 2 Plan**](docs/SPRINT_2_PLAN.md) | Current sprint implementation plan with contextualization roadmap |
-| [**Sprint 2 Story Mapping**](docs/SPRINT_2_STORY_MAPPING.md) | Mapping between plan phases and Jira stories (17 active) |
-| [**Guide for Stakeholders**](docs/DATA_MODEL_FOR_STAKEHOLDERS.md) | Non-technical overview with flow diagrams and business examples |
-| [**Data Model Walkthrough**](docs/DATA_MODEL_WALKTHROUGH.md) | Step-by-step example tracing paper from production to delivery |
-| [**Use Cases & Queries**](docs/USE_CASES_AND_QUERIES.md) | Verified use case scenarios with real data query examples |
-| [**Extractors**](docs/EXTRACTORS.md) | Extractor configurations and status (Fabric, PI, SharePoint, SQL) |
-| [**CI/CD Overview**](docs/CICD_OVERVIEW.md) | CI/CD pipeline setup for CDF deployments (ADO, GitHub, GitLab) |
-| [**Data Pipeline & Sources**](docs/DATA_PIPELINE_AND_SOURCES.md) | Data sources, transformations, and refresh schedules |
-| [**Data Model Specification**](docs/DATA_MODEL_SPECIFICATION.md) | Complete spec with all containers, properties, and examples |
-| [Data Model Diagram](docs/SYLVAMO_MFG_DATA_MODEL_DIAGRAM.md) | Visual diagrams with Mermaid |
-| [Expert Scenarios](docs/USE_CASE_VALIDATION_EXPERT_SCENARIOS.md) | Industry use cases enabled by this model |
-| [ISA Alignment](docs/COGNITE_ISA_EXTENSION_AND_SYLVAMO_ALIGNMENT.md) | ISA-95/88 alignment analysis |
-| [Johan's Guidance](docs/JOHAN_ISA95_GUIDANCE_SUMMARY.md) | Expert recommendations from Cognite |
-| [**Appendix: sylvamo_mfg_core**](docs/APPENDIX_MFG_CORE_MODEL.md) | CDM-integrated data model (Draft for Discussion) |
+| [**Data Model Specification**](docs/reference/data-model/DATA_MODEL_SPECIFICATION.md) | Complete spec with all containers, properties, and examples |
+| [**Guide for Stakeholders**](docs/reference/data-model/DATA_MODEL_FOR_STAKEHOLDERS.md) | Non-technical overview with flow diagrams and business examples |
+| [**Data Model Walkthrough**](docs/reference/data-model/DATA_MODEL_WALKTHROUGH.md) | Step-by-step example tracing paper from production to delivery |
+| [Data Model Diagram](docs/reference/data-model/SYLVAMO_MFG_DATA_MODEL_DIAGRAM.md) | Visual diagrams with Mermaid |
+| [**Appendix: sylvamo_mfg_core**](docs/reference/data-model/APPENDIX_MFG_CORE_MODEL.md) | CDM-integrated data model (Draft for Discussion) |
+| [**Extractors**](docs/reference/extractors/EXTRACTORS.md) | Extractor configurations and status (Fabric, PI, SharePoint, SQL) |
+| [**CI/CD Overview**](docs/reference/extractors/CICD_OVERVIEW.md) | CI/CD pipeline setup for CDF deployments (ADO, GitHub, GitLab) |
+| [**Data Pipeline & Sources**](docs/reference/extractors/DATA_PIPELINE_AND_SOURCES.md) | Data sources, transformations, and refresh schedules |
+| [**Use Cases & Queries**](docs/reference/use-cases/USE_CASES_AND_QUERIES.md) | Verified use case scenarios with real data query examples |
+| [Expert Scenarios](docs/reference/use-cases/USE_CASE_VALIDATION_EXPERT_SCENARIOS.md) | Industry use cases enabled by this model |
+
+### Internal Working Documents
+
+| Document | Description |
+|----------|-------------|
+| [**Sprint 2 Plan**](docs/internal/sprint-planning/SPRINT_2_PLAN.md) | Current sprint implementation plan with contextualization roadmap |
+| [**Sprint 2 Story Mapping**](docs/internal/sprint-planning/SPRINT_2_STORY_MAPPING.md) | Mapping between plan phases and Jira stories (17 active) |
+| [ISA Alignment](docs/internal/plans/COGNITE_ISA_EXTENSION_AND_SYLVAMO_ALIGNMENT.md) | ISA-95/88 alignment analysis |
+| [Johan's Guidance](docs/internal/plans/JOHAN_ISA95_GUIDANCE_SUMMARY.md) | Expert recommendations from Cognite |
 
 ## Extractors
 
@@ -280,7 +291,7 @@ All extractor-managed databases use the prefix `raw_ext_<extractor>_<source>`:
 | `raw_ext_sql_proficy` | SQL Extractor | Proficy lab test results |
 | `raw_ext_sharepoint` | SharePoint Extractor | Documents and quality reports |
 
-**[See Full Extractor Documentation →](docs/EXTRACTORS.md)**
+**[See Full Extractor Documentation →](docs/reference/extractors/EXTRACTORS.md)**
 
 ## Data Pipeline
 
@@ -338,7 +349,7 @@ flowchart LR
 | PPR (via Fabric) | `raw_ext_fabric_ppr/ppr_hist_package` | Package |
 | SharePoint | `raw_ext_sharepoint/roll_quality` | QualityResult |
 
-**[See Full Data Pipeline Documentation →](docs/DATA_PIPELINE_AND_SOURCES.md)**
+**[See Full Data Pipeline Documentation →](docs/reference/extractors/DATA_PIPELINE_AND_SOURCES.md)**
 
 ## CI/CD for CDF
 
@@ -388,7 +399,7 @@ Pipelines authenticate via **OAuth2 client credentials** (Entra ID service princ
 
 Secrets stored in **project-level Variable Groups** in the SylvamoCorp ADO project, injected as env vars at runtime.
 
-**[See Full CI/CD Documentation →](docs/CICD_OVERVIEW.md)**
+**[See Full CI/CD Documentation →](docs/reference/extractors/CICD_OVERVIEW.md)**
 
 ## Real Data Statistics
 
