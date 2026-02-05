@@ -1,366 +1,336 @@
 # CI/CD for CDF - Speaker Notes
 
-**Presentation for Technical Platform Teams**
+**Show & Tell + Handoff for Sylvamo Platform Team**
 
 ---
 
-## SLIDE: Title / TL;DR
+## FRAMING: How to Position This Meeting
 
-**SPEAKER NOTES:**
+**INTERNAL NOTE (don't say this out loud):**
 
-Welcome everyone. Today I'm going to walk you through how we do CI/CD for Cognite Data Fusion, or CDF. This is aimed at technical folks who may not be familiar with CDF specifically, so I'll explain things from a platform engineering perspective.
+The goal is to:
+1. **Show what we built** - demo the working CI/CD setup
+2. **Transfer understanding** - explain how it works so they can own it
+3. **Give them clear ownership** - specific things THEY need to do going forward
 
-Let me start with the big picture - five key points to keep in mind:
-
-1. **CDF is a cloud service** - think of it like Salesforce, Snowflake, or any other SaaS platform. We deploy TO it, not inside it.
-
-2. **We use a CLI tool called Cognite Toolkit** - the command is just `cdf`. This is a pre-built tool from Cognite, we don't write custom deployment code.
-
-3. **Three commands to remember**: `cdf build` validates our configuration, `cdf deploy --dry-run` shows what WOULD change without actually changing anything, and `cdf deploy` applies the changes for real.
-
-4. **Authentication uses a service principal** - this is an Entra ID app registration with a client ID and client secret. It's basically a robot account that the pipeline uses to talk to CDF.
-
-5. **Secrets are stored in ADO Variable Groups** - these are project-level variable groups in our SylvamoCorp Azure DevOps project. The pipeline automatically injects them as environment variables at runtime.
-
-If you remember nothing else from this presentation, remember those five points.
+Avoid making it sound like "we did everything, you're done." Instead: "we set up the foundation, here's what you own now."
 
 ---
 
-## SLIDE: Sylvamo Repository
+## SLIDE: Opening
 
 **SPEAKER NOTES:**
 
-Before we dive in, let me show you where everything lives.
+Thanks for joining. Today I want to walk you through the CI/CD setup we've put in place for CDF deployments.
 
-Our Toolkit configuration is managed in Azure DevOps in a repository called **Industrial-Data-Landscape-IDL**. You can find it at dev.azure.com/SylvamoCorp. The branch we're working on is `fernando/test` but the concepts apply to main as well.
+I'll show you:
+1. **What we've built** - the pipelines, the configuration, how it all works
+2. **How you'll use it** - the day-to-day workflow
+3. **What you own going forward** - the pieces that your team will manage
 
-All our credentials are stored at the **project level** in the SylvamoCorp ADO project. This means any pipeline in this repository can access them - we don't have to configure credentials per-pipeline.
+By the end, you'll have a clear picture of the system and know exactly what actions you need to take.
 
 ---
 
-## SLIDE: What is CDF from a CI/CD Perspective?
+## SLIDE: What's Already Done (Cognite Setup)
 
 **SPEAKER NOTES:**
 
-Let me explain what CDF looks like from your perspective as a platform team.
+Let me start by showing you what's already in place. We've set up the core CI/CD infrastructure so you don't have to build it from scratch.
 
-CDF is an **external SaaS endpoint**. It's hosted in Cognite-managed cloud clusters - for Sylvamo, we're using the `westeurope-1` cluster.
+**What Cognite has configured:**
 
-When our CI/CD pipeline runs, it connects to CDF over HTTPS. The authentication uses OAuth2 client credentials flow - that's the same pattern you'd use for any service-to-service authentication with Entra ID.
+| Component | Status | Details |
+|-----------|--------|---------|
+| Toolkit repository | Done | Industrial-Data-Landscape-IDL in your ADO |
+| Pipeline YAML files | Done | `.devops/` folder with dry-run and deploy pipelines |
+| Docker image reference | Done | Using `cognite/toolkit:0.5.35` |
+| Config file structure | Done | `config.dev.yaml`, `config.staging.yaml`, `config.prod.yaml` |
+| Variable Groups | Done | `dev-toolkit-credentials` created with all required vars |
+| Service Principal | Done | App registration in Entra ID with CDF access |
 
-The key mental model here is: **treat CDF like any external cloud API**. It's no different from deploying to AWS, Azure, or calling the Salesforce API. Your pipeline authenticates with credentials, makes API calls to create or update resources, and that's it.
+This is the foundation. You don't need to set any of this up - it's working today.
 
-Nothing runs "inside" your network. The pipeline runs in ADO's hosted agents, talks to CDF over the public internet using HTTPS, and CDF does all the work on their end.
+Let me show you where everything lives...
+
+*[Navigate to ADO repo and show the structure]*
 
 ---
 
-## SLIDE: The CI/CD Tech Stack
+## SLIDE: Live Demo - The Repository
 
 **SPEAKER NOTES:**
 
-Let's talk about the actual tools we use.
+*[Share screen - show ADO repo]*
 
-The **deployment tool** is the Cognite Toolkit CLI. The command is `cdf`. You can install it as a Python package via pip - `pip install cognite-toolkit` - or use Cognite's official Docker image: `cognite/toolkit` with a specific version tag.
+Here's the Industrial-Data-Landscape-IDL repository. Let me walk you through the key pieces:
 
-The **key commands** you'll see in pipelines are:
-- `cdf build` - this validates your configuration files and compiles them into a deployable format
-- `cdf deploy --dry-run` - this shows what would change in CDF without actually making changes. Think of it like `terraform plan`.
-- `cdf deploy` - this actually applies the changes. Like `terraform apply`.
+**The config files:**
+- `sylvamo/config.dev.yaml` - points to your DEV CDF project
+- These define which modules get deployed and to which environment
 
-For **pipeline definitions**, we use YAML. The Toolkit supports GitHub Actions, Azure DevOps Pipelines, and GitLab CI/CD. For Sylvamo, we're using Azure DevOps, so our pipelines live in `.devops/*.yml` files.
+**The modules folder:**
+- `sylvamo/modules/` - this is where all the CDF resources are defined
+- Data models, transformations, access groups - everything is YAML
 
-Here's something important: **you don't need to write Python code**. The Toolkit is a pre-built CLI - you just call it from your pipeline. All the configuration is in YAML files. If you know YAML and understand CI/CD concepts, you can work with this.
+**The pipeline files:**
+- `.devops/dry-run-pipeline.yml` - validates PRs
+- `.devops/deploy-pipeline.yml` - deploys on merge
+
+*[Show the Variable Groups in ADO Project Settings]*
+
+And here are the Variable Groups we created - `dev-toolkit-credentials`. This contains your service principal credentials. The secret is masked - you can see it says "(secret)" - so it's secure.
 
 ---
 
-## SLIDE: Repository Structure
+## SLIDE: Live Demo - A PR Workflow
 
 **SPEAKER NOTES:**
 
-Let me walk you through how a Toolkit repository is structured.
+Let me show you what happens when someone makes a change.
 
-At the root of the repo, you have an organization directory - in our case, it's called `sylvamo/`. Inside that directory, you have:
+*[Create a small PR or show an existing one]*
 
-**Config files per environment:**
-- `config.dev.yaml` - points to our DEV CDF project
-- `config.staging.yaml` - points to STAGING
-- `config.prod.yaml` - points to PROD
+When a PR is created, the dry-run pipeline triggers automatically. Let's look at the output...
 
-Each config file defines two things:
-1. The **target CDF project** - like `project: sylvamo-dev`
-2. Which **modules to deploy** - a `selected:` list that says which pieces of infrastructure to include
+*[Show pipeline run]*
 
-**Modules directory:**
-The `modules/` folder contains the actual resources you're deploying - data models, transformations, RAW databases, access groups, whatever CDF resources you need.
+You can see:
+1. `cdf build` - validated the configuration, no errors
+2. `cdf deploy --dry-run` - shows what WOULD change
 
-The key concept here is: **one repo, multiple environments**. The same module code deploys to dev, staging, and prod. The only difference is which config file you point to - and each config file points to a different CDF project.
+This output tells reviewers exactly what will happen if this PR is merged. Nothing actually changes in CDF yet - this is just a preview.
 
-This is created initially by running `cdf modules init <organization_dir>`, which scaffolds out this structure for you.
+*[If possible, show the dry-run output with resource changes]*
+
+When the PR is merged to main, the deploy pipeline runs and actually applies these changes.
+
+This is the workflow your developers will use every day.
 
 ---
 
-## SLIDE: CI/CD Flow Overview
+## SLIDE: What YOUR Team Owns
 
 **SPEAKER NOTES:**
 
-Now let's talk about the actual CI/CD flow. This follows a standard pattern you've probably seen before.
+Now let's talk about what your team is responsible for going forward. We built the foundation, but **you own the system now**.
 
-**On feature branches - the CI part:**
-
-When a developer creates a PR, the CI pipeline triggers automatically. It runs two steps:
-
-1. `cdf build` - validates the configuration
-2. `cdf deploy --dry-run` - shows what WOULD change in CDF
-
-The dry-run output shows exactly which resources would be created, updated, or deleted. This is like `terraform plan` - it's a preview, nothing actually changes.
-
-We configure this as a **branch policy** - the PR cannot be merged unless this pipeline passes. This gives reviewers confidence that the changes are valid and they can see the impact before approving.
-
-**On main branch - the CD part:**
-
-When code is merged to main, the CD pipeline triggers. It runs:
-
-1. `cdf build` - again, validates everything
-2. `cdf deploy` - actually applies the changes to CDF
-
-For environment promotion, we use a model of DEV → STAGING → PROD. Each is a separate CDF project, and you can add approval gates between stages using ADO Environments.
-
-The key safety net here is the **two-step process**:
-- PR stage: dry-run shows what WOULD change
-- Merge stage: deploy actually applies changes
-
-Nothing changes in CDF until code is merged to main. This gives you full auditability through Git history.
+Here's what falls under your team's responsibility:
 
 ---
 
-## SLIDE: Authentication Model
+## YOUR ACTION ITEMS
 
 **SPEAKER NOTES:**
 
-Let's talk about how the pipeline authenticates to CDF. This is probably the most important part for a platform team to understand.
+Let me be specific about what you need to do:
 
-The Toolkit uses **OAuth2 client credentials flow**. This is the standard pattern for service-to-service authentication with Entra ID.
+### 1. Enable Branch Policies (Required)
 
-The required environment variables are:
+**What:** Configure the dry-run pipeline as a required check on PRs to main.
 
-- `LOGIN_FLOW` - set to `client_credentials`
-- `CDF_CLUSTER` - the Cognite cluster, like `westeurope-1`
-- `CDF_PROJECT` - the target project, like `sylvamo-dev`
-- `IDP_CLIENT_ID` - the App Registration's Application ID
-- `IDP_CLIENT_SECRET` - the client secret (this is the sensitive one)
-- `IDP_TENANT_ID` - your Entra ID tenant ID
+**Why:** This prevents broken configurations from being merged. Right now the pipeline runs, but PRs can still be merged even if it fails.
 
-**How Sylvamo is configured:**
+**How:** 
+- Go to Repos → Branches → main → Branch policies
+- Add a Build Validation policy
+- Select the dry-run pipeline
+- Set to "Required"
 
-We use ADO Variable Groups at the project level. We have one group per environment:
-- `dev-toolkit-credentials`
-- `staging-toolkit-credentials`
-- `prod-toolkit-credentials`
+**Who:** Your ADO admin
 
-Each group contains those six variables. The `IDP_CLIENT_SECRET` is marked as a secret in ADO, so it's encrypted and masked in logs.
-
-**How the flow works:**
-
-1. ADO stores the credentials in a Variable Group - think of it like a secure key-value store
-2. The pipeline YAML links to that Variable Group with `variables: - group: dev-toolkit-credentials`
-3. When the job runs, ADO automatically injects those values as environment variables
-4. The `cdf` CLI reads those environment variables and uses them to authenticate
-
-You never see the secrets in code - they're injected at runtime. The secret values never appear in logs because ADO masks them.
-
-Because we store these at the project level, any pipeline in the Industrial-Data-Landscape-IDL repository can access them. We don't have to configure credentials separately for each pipeline.
+**When:** This week
 
 ---
 
-## SLIDE: Secret Handling Options
+### 2. Set Up Approval Gates for Production (Required)
 
-**SPEAKER NOTES:**
+**What:** Add manual approval before deploying to staging and prod.
 
-There are two main options for handling secrets. Let me explain both.
+**Why:** You probably don't want every merge to automatically deploy to production. Approvals give you a checkpoint.
 
-**Option A: ADO Variable Groups**
+**How:**
+- Create ADO Environments: `cdf-staging`, `cdf-prod`
+- Add approvers to each environment
+- Update deploy pipeline to use environments
 
-This is the simpler approach and what Sylvamo uses.
+**Who:** Your platform team
 
-The flow is:
-1. Secrets stored in ADO Variable Group
-2. Pipeline links to the group
-3. ADO injects them as environment variables at runtime
-4. Toolkit CLI reads the env vars
-
-This is straightforward and works well for most cases. ADO handles encryption, access control, and audit logging.
-
-**Option B: Azure Key Vault Integration**
-
-This is more complex but might be required if you have organizational policies mandating Key Vault for all secrets.
-
-The flow is:
-1. Pipeline authenticates to Azure (using service connection or managed identity)
-2. Pipeline step fetches secrets from Key Vault
-3. Pipeline exports them as environment variables
-4. Toolkit CLI reads the env vars
-
-The Toolkit itself doesn't have a direct Key Vault integration - it just reads environment variables. So you need pipeline steps to bridge the gap.
-
-**Which should you use?**
-
-For Sylvamo, we use Option A - Variable Groups. It's simpler and meets our requirements.
-
-Use Option B if you have centralized secret management policies requiring Key Vault, or if you need the additional capabilities Key Vault provides like automatic rotation.
-
-One more thing: the Toolkit supports `${VAR_NAME}` placeholders in YAML config files. So if you have a secret that needs to go into a configuration file - like a client secret for a workflow trigger - you can write `${IDP_WF_TRIGGER_SECRET}` and the Toolkit will substitute the environment variable value at deploy time.
+**When:** Before you start deploying to staging/prod
 
 ---
 
-## SLIDE: Key Takeaways for Platform Teams
+### 3. Own the Variable Groups (Ongoing)
 
-**SPEAKER NOTES:**
+**What:** You now own the credentials in the Variable Groups.
 
-Let me summarize the key points for platform teams:
+**Your responsibilities:**
+- **Access control** - manage who can view/edit the Variable Groups
+- **Secret rotation** - when you rotate the service principal secret, update it here
+- **Audit** - periodically review access and usage
 
-**Connection Type:** CDF is external SaaS accessed over HTTPS. It's no different from any other cloud API. No VPN, no private endpoints in our current setup - just public HTTPS to Cognite's cluster.
+**Where:** Project Settings → Pipelines → Library → Variable Groups
 
-**Auth Method:** OAuth2 client credentials via Entra ID service principal. Standard stuff - you create an App Registration, give it a secret, and use client_id + client_secret to get tokens.
-
-**Secrets Storage:** We use ADO Variable Groups at the project level. You could also integrate with Key Vault if that's required by policy.
-
-**CI Pipeline:** `cdf build` plus `cdf deploy --dry-run` on PRs. This is the validation step.
-
-**CD Pipeline:** `cdf deploy` on main branch merge. This is the actual deployment.
-
-**Environments:** We have separate CDF projects for dev, staging, and prod. Each is completely isolated.
-
-**Approvals:** You can use ADO Environments with approval gates if you want manual approval before deploying to prod.
-
-The bottom line is: **standard CI/CD patterns apply**. If you've set up pipelines for Terraform, ARM templates, or any other infrastructure-as-code tool, this will feel very familiar. CDF is just another external API with a CLI tool.
+**Who:** Your platform/security team
 
 ---
 
-## SLIDE: Sample ADO Pipeline - Dry-Run
+### 4. Monitor Pipeline Runs (Ongoing)
+
+**What:** Keep an eye on pipeline success/failure rates.
+
+**Why:** Failed pipelines mean changes aren't deploying. You need visibility.
+
+**How:**
+- Check the Pipelines section regularly
+- Consider setting up notifications for failed runs
+- Review dry-run output before approving PRs
+
+**Who:** Your platform team + developers doing code review
+
+---
+
+### 5. Onboard Your Developers (This Month)
+
+**What:** Train your developers on the workflow.
+
+**Key things they need to know:**
+- All CDF changes go through Git - no manual changes in the UI
+- Create a branch, make changes, open a PR
+- Review the dry-run output before approving
+- Merge to main to deploy
+
+**Who:** You, with our support if needed
+
+---
+
+### 6. Extend to Staging and Production (Future)
+
+**What:** We've set up DEV. You'll need to extend to staging and prod.
+
+**What's needed:**
+- Create Variable Groups for staging and prod credentials
+- Update pipelines with multi-stage deployment
+- Add the approval gates mentioned above
+
+**Who:** Your platform team (we can assist)
+
+**When:** When you're ready to promote beyond dev
+
+---
+
+## SLIDE: The Workflow Your Developers Will Follow
 
 **SPEAKER NOTES:**
 
-Let me walk through the dry-run pipeline YAML.
+Let me summarize the day-to-day workflow for your developers:
 
-```yaml
-trigger:
-  - none  # Triggered via PR validation
+```
+1. Create a feature branch
+2. Make changes to YAML files in the modules/ folder
+3. Push and create a PR
+4. Pipeline runs automatically - check the dry-run output
+5. Code review - reviewer checks the dry-run to see what will change
+6. Merge to main
+7. Deploy pipeline runs - changes applied to CDF
 ```
 
-We set trigger to `none` because this pipeline is triggered by PR validation, not by pushes directly.
+This is GitOps for CDF. Everything is tracked in Git, reviewable, auditable.
 
-```yaml
-pool:
-  vmImage: 'ubuntu-latest'
-```
-
-We use Microsoft-hosted agents with Ubuntu.
-
-```yaml
-variables:
-  - group: dev-toolkit-credentials
-```
-
-This links to our Variable Group. ADO will inject all the variables from this group as environment variables.
-
-```yaml
-container:
-  image: cognite/toolkit:0.5.35
-```
-
-We run inside Cognite's official Docker image. This has the `cdf` CLI pre-installed with all dependencies. You specify the version to ensure reproducible builds.
-
-```yaml
-steps:
-  - script: cdf build
-    displayName: 'Build Toolkit Modules'
-
-  - script: cdf deploy --dry-run
-    displayName: 'Validate Deployment (Dry Run)'
-```
-
-Two simple steps: build and dry-run. If either fails, the pipeline fails and the PR can't be merged.
-
-This pipeline runs on every PR. It validates that the configuration is correct and shows reviewers what would change if this code were merged.
+The key mindset shift: **no more manual changes in the CDF UI**. If it's not in Git, it doesn't exist.
 
 ---
 
-## SLIDE: Sample ADO Pipeline - Deploy
+## SLIDE: Quick Reference - What We Covered
 
 **SPEAKER NOTES:**
 
-Now the deploy pipeline.
+Let me recap:
 
-```yaml
-trigger:
-  branches:
-    include:
-      - main
-```
+**What Cognite set up (done):**
+- Repository structure
+- Pipeline YAML files
+- Variable Groups with credentials
+- Service principal with CDF access
 
-This triggers automatically when code is pushed to main - which happens when a PR is merged.
+**What Sylvamo owns (your responsibility):**
+- Branch policies - enable them
+- Approval gates - set them up for prod
+- Variable Groups - manage access and rotate secrets
+- Pipeline monitoring - watch for failures
+- Developer onboarding - train your team
+- Staging/prod extension - when ready
 
-```yaml
-variables:
-  - group: prod-toolkit-credentials
-```
-
-Note we're using the prod credentials here. In a real setup, you might have multiple stages - deploy to dev first, then staging, then prod with approvals.
-
-```yaml
-steps:
-  - script: cdf build
-    displayName: 'Build Toolkit Modules'
-
-  - script: cdf deploy
-    displayName: 'Deploy to CDF'
-    env:
-      IDP_CLIENT_SECRET: $(IDP_CLIENT_SECRET)
-```
-
-The deploy step has an extra `env:` block. This is an ADO quirk - secret variables need to be explicitly mapped into the environment for script steps. The `$(IDP_CLIENT_SECRET)` syntax pulls from the Variable Group.
-
-That's it - two steps, and your changes are deployed to CDF.
+**Key URLs:**
+- Repo: https://dev.azure.com/SylvamoCorp/_git/Industrial-Data-Landscape-IDL
+- Variable Groups: Project Settings → Pipelines → Library
+- Branch Policies: Repos → Branches → main → ⋮ → Branch policies
 
 ---
 
-## CLOSING
+## SLIDE: Questions & Next Steps
 
 **SPEAKER NOTES:**
 
-To wrap up:
+Before we wrap up, let me confirm next steps:
 
-CDF CI/CD is straightforward if you're familiar with infrastructure-as-code patterns. We have:
-- A CLI tool (`cdf`) that handles all the complexity
-- YAML configuration files in a Git repository
-- Standard CI/CD pipelines that validate on PR and deploy on merge
-- OAuth2 authentication using Entra ID service principals
-- Secrets stored in ADO Variable Groups
+**This week:**
+- [ ] Enable branch policies on main (your ADO admin)
+- [ ] Review Variable Group access (your security team)
 
-The Sylvamo repository is at dev.azure.com/SylvamoCorp - the Industrial-Data-Landscape-IDL repo. Credentials are already configured at the project level.
+**This month:**
+- [ ] Onboard 1-2 developers to try the workflow
+- [ ] Plan staging/prod rollout timeline
+
+**We're here to help:**
+- Questions on the setup - reach out anytime
+- Staging/prod extension - we can pair on this
+- Developer training - we can join a session if helpful
 
 Any questions?
 
 ---
 
-## APPENDIX: Quick Reference
+## APPENDIX: Technical Details (If They Ask)
 
-**Commands:**
-- `cdf build` - Validate and compile configuration
-- `cdf deploy --dry-run` - Preview changes (no actual changes)
-- `cdf deploy` - Apply changes to CDF
+### How Authentication Works
 
-**Environment Variables:**
-- `LOGIN_FLOW=client_credentials`
-- `CDF_CLUSTER=westeurope-1`
-- `CDF_PROJECT=sylvamo-dev`
-- `IDP_CLIENT_ID=<app-id>`
-- `IDP_CLIENT_SECRET=<secret>`
-- `IDP_TENANT_ID=<tenant-id>`
+The pipeline authenticates to CDF using OAuth2 client credentials:
 
-**Key URLs:**
-- ADO Repo: https://dev.azure.com/SylvamoCorp/_git/Industrial-Data-Landscape-IDL
-- Data Model Docs: https://github.com/fbarsoba-cognite/sylvamo-data-model
+1. Variable Group contains: `IDP_CLIENT_ID`, `IDP_CLIENT_SECRET`, `IDP_TENANT_ID`
+2. Pipeline injects these as environment variables
+3. Toolkit CLI reads them and gets an access token from Entra ID
+4. Token is used for all CDF API calls
+
+### The Commands
+
+- `cdf build` - Validates YAML, compiles configuration
+- `cdf deploy --dry-run` - Shows what would change (no actual changes)
+- `cdf deploy` - Applies changes to CDF
+
+### Environment Variables Reference
+
+| Variable | Value | Where It Comes From |
+|----------|-------|---------------------|
+| `LOGIN_FLOW` | `client_credentials` | Variable Group |
+| `CDF_CLUSTER` | `westeurope-1` | Variable Group |
+| `CDF_PROJECT` | `sylvamo-dev` | Variable Group |
+| `IDP_CLIENT_ID` | `<app-id>` | Variable Group (from Entra ID) |
+| `IDP_CLIENT_SECRET` | `<secret>` | Variable Group (secret, masked) |
+| `IDP_TENANT_ID` | `<tenant-id>` | Variable Group |
+
+---
+
+## CHEAT SHEET: Action Items Summary
+
+| # | Action | Owner | Timeline | Priority |
+|---|--------|-------|----------|----------|
+| 1 | Enable branch policies on main | ADO Admin | This week | Required |
+| 2 | Set up approval gates for staging/prod | Platform Team | Before prod deploy | Required |
+| 3 | Review Variable Group access controls | Security Team | This week | Required |
+| 4 | Set up pipeline failure notifications | Platform Team | This month | Recommended |
+| 5 | Onboard 1-2 developers to workflow | Platform Team | This month | Required |
+| 6 | Plan staging/prod extension | Platform + Cognite | This quarter | Future |
 
 ---
 
