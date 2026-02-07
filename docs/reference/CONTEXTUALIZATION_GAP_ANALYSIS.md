@@ -213,7 +213,7 @@ def normalize_to_sortfield(equip_num: str) -> list[str]:
     return sorted(candidates)
 ```
 
-The `SORTFIELD_ANALYSIS_REPORT.md` reveals the scale of the problem:
+The [SORTFIELD_ANALYSIS_REPORT.md](SORTFIELD_ANALYSIS_REPORT.md) reveals the scale of the problem:
 
 - **Eastover**: 3,350 sortField values -- 50.1% alphanumeric (`31200L16B`, `471LP490`), 48.5% numeric (`4710052317`)
 - **Sumter**: 83 sortField values -- 79.3% alphanumeric but descriptive (`1DUSTFAN`, `2BWRAPPER`)
@@ -524,7 +524,7 @@ TEST_FILES = [
 | | Adding a new site requires duplicating and modifying scripts |
 | | No single-responsibility separation between ingestion, digestion, and contextualization |
 
-**Evidence of the problem (from SORTFIELD_ANALYSIS_REPORT.md):**
+**Evidence of the problem (from [SORTFIELD_ANALYSIS_REPORT.md](SORTFIELD_ANALYSIS_REPORT.md)):**
 
 Eastover sortField values are structured numeric codes (`4710052317`, `31200L16B`). Sumter sortField values are descriptive names (`1DUSTFAN`, `2BWRAPPER`). If we were to contextualize Sumter P&IDs with the same `normalize_to_sortfield()` function used for Eastover, it would produce entirely wrong results. This is exactly the case logic anti-pattern the primer warns about.
 
